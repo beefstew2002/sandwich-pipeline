@@ -32,6 +32,7 @@ def timeline_generator(
 def shot_timeline_generator(
     # shot_duration is the "Animate!" segment length in frames.
     shot_duration: int,
+    shot_start_frame: int,
 ) -> tuple[list[int], list[tuple[int, int, int]], list[str]]:
     return timeline_generator(
         # Preroll segments shown before start_frame.
@@ -47,5 +48,5 @@ def shot_timeline_generator(
             ("Animate!", (0, 255, 0), shot_duration),
             ("Tail", (100, 160, 255), 5),
         ],
-        start_frame=1001,
+        start_frame=shot_start_frame,
     )

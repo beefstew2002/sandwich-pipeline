@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 import site
+import sys
 
 from argparse import ArgumentParser
 
@@ -37,6 +38,13 @@ def launch(
     is_python_shell: bool = False,
     extra_args: list[str] | None = None,
 ) -> None:
+    if sys.platform == "Linux":
+        # raise open file descriptor limit
+        import resource
+
+        _, max_fd = resource.getrlimit(resource.RLIMIT_NOFILE)
+        resource.setrlimit(resource.RLIMIT_NOFILE, (max_fd, max_fd))
+
     launcher_cls = find_implementation(DCCLauncher, f"dcc.{software_name}")
     launcher_cls(is_python_shell, extra_args).launch()
 
