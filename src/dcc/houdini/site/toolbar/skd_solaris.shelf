@@ -10,6 +10,7 @@
     <memberTool name="save_asset_version"/>
     <memberTool name="asset_version_history"/>
     <memberTool name="skd_playblast"/>
+    <memberTool name="sdk_publish"/>
   </toolshelf>
 
   <toolshelf name="skd_sets" label="SKD Sets">
@@ -252,4 +253,8 @@ loptoolutils.referenceTestAsset(node, asset_name)]]></script>
   <toolshelf name="testing" label="Testing">
     <memberTool name="flashbang"/>
   </toolshelf>
+
+  <tool name="sdk_publish" label="Publish" icon="CHOP_envelope">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
 </shelfDocument>
