@@ -255,6 +255,8 @@ loptoolutils.referenceTestAsset(node, asset_name)]]></script>
   </toolshelf>
 
   <tool name="sdk_publish" label="Publish" icon="CHOP_envelope">
-    <script scriptType="python"><![CDATA[]]></script>
+    <script scriptType="python"><![CDATA[from dcc.houdini.publish.asset_publish_dialog import AssetPublishDialog
+apd = AssetPublishDialog()
+apd.exec()]]></script>
   </tool>
 </shelfDocument>
