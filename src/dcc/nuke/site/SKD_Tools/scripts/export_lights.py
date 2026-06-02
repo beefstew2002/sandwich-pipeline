@@ -32,9 +32,7 @@ def run():
                 rgb = list(mult_val[:3])
 
             light_name = name.replace("_grade", "")
-            data[light_name] = {
-                "multiply": rgb
-            }
+            data[light_name] = {"multiply": rgb}
 
     try:
         with open(output_path, "w") as f:

@@ -11,6 +11,7 @@ import hou
 from dcc.houdini import runtime as houdini_runtime
 from core.ui import FilteredListDialog, MessageDialog
 from dcc.houdini.hipfile.departments import DEPARTMENT_OPTIONS, Department
+from dcc.houdini.hipfile.paths import department_from_hip_path
 from core.shot import houdini_department_stream, shot_owner_for
 from core.shotgrid import (
     Environment,
@@ -99,26 +100,13 @@ class HShotFileManager(HFileManager):
         shot = cast(Shot, entity)
         self._set_playbar_ranges(shot)
         self._set_environment_paths(shot)
+        # update SHOT_SUBSTEPS variable, this is read by the
+        # sync_motion_substeps HDA
+        hou.putenv("SHOT_SUBSTEPS", str(shot.substeps))
 
     def _department_value(self) -> str:
         normalized = str(self._department or "").strip()
         return normalized or "unknown"
-
-    @classmethod
-    def _department_from_path(cls, hip_path: Path) -> str | None:
-        parent_name = hip_path.parent.name.strip().lower()
-        if parent_name in cls._department_options():
-            return parent_name
-
-        if hip_path.suffix.lower() != ".hipnc":
-            return None
-
-        stem = hip_path.stem.strip().lower()
-        if ".v" in stem:
-            stem = stem.rsplit(".v", 1)[0]
-        if stem in cls._department_options():
-            return stem
-        return None
 
     def _resolve_shot_for_hip(self, hip_path: Path) -> Shot | None:
         try:
@@ -153,7 +141,7 @@ class HShotFileManager(HFileManager):
         if shot is None:
             return None
 
-        department = self._department_from_path(hip_path)
+        department = department_from_hip_path(hip_path)
         if department is None:
             return None
 

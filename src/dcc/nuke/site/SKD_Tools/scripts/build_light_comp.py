@@ -14,7 +14,7 @@ MERGE_Y_OFFSET = 80
 def _light_layer_name(prim_path):
     s = str(prim_path)
     if s.startswith(LIGHTS_PREFIX):
-        s = s[len(LIGHTS_PREFIX):]
+        s = s[len(LIGHTS_PREFIX) :]
     else:
         s = s.lstrip("/")
     return s.replace("/", "__")
@@ -22,12 +22,13 @@ def _light_layer_name(prim_path):
 
 def _collect_light_layer_names(usd_path):
     from pxr import Usd, UsdLux
+
     stage = Usd.Stage.Open(usd_path)
     if stage is None:
         raise RuntimeError("Could not open USD: %s" % usd_path)
     names = []
     for prim in stage.Traverse():
-        if prim.HasAPI(UsdLux.LightAPI):
+        if prim.HasAPI(UsdLux.LightAPI):  # type: ignore
             names.append(_light_layer_name(prim.GetPath()))
     return names
 
@@ -78,23 +79,22 @@ def run():
 
     grades = []
     for i, layer in enumerate(layer_names):
-        nuke.Layer(layer, [
-            "%s.red" % layer,
-            "%s.green" % layer,
-            "%s.blue" % layer,
-        ])
+        nuke.Layer(
+            layer,
+            [
+                "%s.red" % layer,
+                "%s.green" % layer,
+                "%s.blue" % layer,
+            ],
+        )
 
         x = base_x + i * BRANCH_SPACING
 
-        shuffle = nuke.nodes.Shuffle2(
-            name="Shuffle_%s" % layer, xpos=x, ypos=shuffle_y
-        )
+        shuffle = nuke.nodes.Shuffle2(name="Shuffle_%s" % layer, xpos=x, ypos=shuffle_y)
         shuffle.setInput(0, read)
         shuffle["in1"].setValue(layer)
 
-        grade = nuke.nodes.Grade(
-            name="%s_grade" % layer, xpos=x, ypos=grade_y
-        )
+        grade = nuke.nodes.Grade(name="%s_grade" % layer, xpos=x, ypos=grade_y)
         grade.setInput(0, shuffle)
         grades.append(grade)
 

@@ -434,6 +434,11 @@ class Shot(SGEntity):
             ),
         },
     )
+    substeps: int = field(
+        default=1,
+        kw_only=True,
+        metadata={_SG_NAME: "sg_substeps", _STRUCT_HOOK: lambda s, _: s or 1},
+    )
 
     @property
     def shot_path(self) -> str:

@@ -114,6 +114,7 @@ _SG_FIELDS_SHOT: tuple[str, ...] = (
     "sg_sequence",
     "sg_set",
     "sg_sets",
+    "sg_substeps",
 )
 _SG_FIELDS_SEQUENCE: tuple[str, ...] = (
     "id",

@@ -82,7 +82,7 @@ class CameraPublisher(Publisher):
             "chaser": [ExportChaser.ID],
             "chaserArgs": [(ExportChaser.ID, "mode", ExportChaserMode.CAM)],
             "frameRange": (start, end),
-            "frameStride": 1.0,
+            "frameStride": 1.0 / shot.substeps,
         }
 
     def _get_confirm_message(self) -> str:
